@@ -1,6 +1,3 @@
-.stack-work/
-*.cabal
-*~
 .idea/
 *.iml
 *.iws

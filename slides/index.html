@@ -1,0 +1,1115 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section><h1>Security Theater</h1>
+				<p><h3>When types help, and when they don't</h3></p>
+
+				</section>
+				<section>
+				What this talk is about:
+				<ul>
+				<li class="fragment fade-in">Benefits of using different technical approaches</li>
+				<li class="fragment fade-in">But, like, how do we evaluate these things coherently?</li>
+				<ul>
+        				<li class="fragment fade-in">Tech is fad and fashion-driven, so objective data or genuine experience is hard to find</li>
+					<li class="fragment fade-in">Marketing, hype, and  hot-take thonk pieces only make this harder.</li>
+				</ul>
+				</ul>
+				</section>
+
+				<section>
+
+				What this talk is *not* about:
+				<p />
+				<ul>
+				  <li class="fragment fade-in">What's best in life?</li>
+				</ul>
+				</section>
+
+				<section>
+				  <img class="r-stretch" src="resources/conan.jpg">
+				</section>
+
+				<section>
+
+				What this talk is *not* about:
+				<p />
+				<ul>
+				  <li>What's best in life?</li>
+				  <li>We aren't answering moral quandaries, we are, as much as possible, looking at objective data.</li>
+				</ul>
+				<p>
+				  <ul>
+				    <li class="fragment fade-in">At what cost?</li>
+				    <li class="fragment fade-in">To what end?</li>
+				</section>
+
+				<section>
+				  The greatest minds in human history have gotten themselves wrapped around an axle trying to decide what is <i>right</i> or <i>good</i>.
+
+				  <p class="fragment fade-in">
+				    Not that such conversations aren't worth having, but it's very easy to spend a lot of time thinking about stuff without actually deciding anything.
+				  </p>
+				</section>
+
+				<section>
+				  Engineers make decisions.
+
+				  <p class="fragment fade-in">In particular, engineers weigh and choose</p>
+
+				  <p class="fragment fade-in"><span style="color:red;">trade-offs</span></p>
+				</section>
+
+				<section>
+				  We are obligated to examine not only the benefits the rhetoric promises us, but the benefits of the practice in action, and the costs.
+
+				  <p class="fragment fade-in">Type systems and tests are valuable because they make development easier.</p>
+				  <p class="fragment fade-in">But, that does <b>NOT</b> mean that "more types," "more tests," or "more machinery" are necessarily good things.</p>
+				</section>
+
+				<section>
+				  <blockquote>
+				    The costs of achieving justice matter. Another way of saying the same is that "justice at all costs" is not justice. What, after all, is an injustice but the arbitrary imposition of a cost--whether economic, psychic, or other--on an innocent person? And if correcting this injustice imposes another arbitrary cost on another innocent person, is that not also an injustice?
+				  </blockquote>
+
+				  <p>
+				  -- Thomas Sowell, <i>The Quest for Cosmic Justice</i>
+				  </p>
+
+				</section>
+				<section>
+				  So, what are some examples from everyday life that might illustrate both ends of the cost/benefit spectrum?
+				</section>
+
+				<section>
+				  Positive example:
+
+				  <p class="fragment fade-in">Stop signs!</p>
+
+				  <p class="fragment fade-in">Stop signs are:
+				  <ul>
+				    <li class="fragment fade-in">Cheap - high-end ones are ~$130 USD, and the price goes down quickly with bulk orders</li>
+				    <li class="fragment fade-in">Require little maintenance or supervision</li>
+				    <li class="fragment fade-in">They're also quite effective, provided they are used for their intended purpose, and not to artificially slow drivers down.</li>
+				  </ul>
+				  </p>
+
+				  <p class="fragment fade-in">citations:  <a href="https://www.roadtrafficsigns.com/traffic-stop-signs">cost,</a> <a href="http://archive.rcgov.org/ca20140902/PW081214-09/RESEARCH%20ON%20EFFECTIVENESS%20OF%20ALL-WAY%20STOPS.pdf">danger of unwarranted use</a></p>
+				    
+				</section>
+
+				<section>
+				  Middling example:
+
+				  <p class="fragment fade-in">Roundabouts!</p>
+
+				  <p class="fragment fade-in">Advantages:
+				    <ul>
+				      <li class="fragment fade-in">Studies show a 75% reduction of injury crashes</li>
+				      <li class="fragment fade-in">While also improving traffic flow and reducing delays</li>
+				    </ul>
+				    </p>
+
+				  <p class="fragment fade-in"><a href="https://wsdot.wa.gov/travel/traffic-safety-methods/roundabouts#:~:text=Roundabouts%20reduced%20injury%20crashes%20by,for%20Highway%20Safety%20(IIHS).">citation</a></p>
+
+
+				</section>
+
+				<section>
+				  Disadvantages:
+				  <ul>
+				    <li class="fragment fade-in">Steeper learning curve for new drivers</li>
+				    <li class="fragment fade-in">It's much more expensive to convert a four-way-stop to a roundabout than it is to simply upgrade the stop sign</li>
+				  </ul>
+
+				  
+				</section>
+
+				<section>
+				  Bad example:
+
+				  <p class="fragment fade-in">The TSA</p>
+
+				  <p class="fragment fade-in">Well, we can't argue with it's stated goal, surely stopping hijackings is something worth doing?</p>
+				</section>
+
+				<section>
+				  The TSA
+
+				  <p>First off, the cost.</p>
+
+				  <ul>
+				    <li class="fragment fade-in">It costs $9.8 billion USD a year to run.</li>
+				    <li class="fragment fade-in">When DHS ran a "secret shopper" test, agents tried to sneak weapons past TSA scanners.</li>
+				    <ul>
+				      <li class="fragment fade-in">The failure rate across the years we have information on ranged from "around 80%" to 95%.</li>
+				      </ul>
+				  </ul>
+
+				  <p class="fragment fade-in"><a href="https://www.dhs.gov/sites/default/files/2022-03/Transportation%20Security%20Administration_Remediated.pdf">Budget source,</a> <a href="https://fee.org/articles/tsa-fails-95-of-the-time/">95% failure rate,</a> <a href="https://reason.com/2021/11/19/after-20-years-of-failure-kill-the-tsa/">Article with further sources</a></p>
+				</section>
+
+				<section>
+				  Okay, real-world intuition-building examples out of the way, let's dive into some techy ones!
+
+				  <p class="fragment fade-in">Starting with...</p>
+				</section>
+
+				<section>
+				  Compare the windows registry vs /etc configuration files.
+
+				  <p class="fragment fade-in">Advantages of the registry:
+				    <ul>
+				      <li class="fragment fade-in">Locked off from accidental mucking-about.</li>
+				      <li class="fragment fade-in">It's a DB, so you don't have the problem of one program opening a file with an exclusive lock.</li>
+				      <li class="fragment fade-in">Evangelists will say that if you only use high-quality software, it won't go wrong.</li>
+				    </ul>
+				  </p>
+				</section>
+
+				<section>
+				  Disadvantages:
+				    <ul>
+				      <li class="fragment fade-in">Proprietary format.</li>
+				      <ul>
+					<li class="fragment fade-in">Think: grep, ed, git, diff, etc...</li>
+					<li class="fragment fade-in">I'm showing my sysadmin side: Flat files are also pretty straightforward to manage via configuration management.</li>
+				      </ul>
+				      <li class="fragment fade-in">"Use professional software" is "Your C code crashing is a skill issue" in a bad suit.</li>
+				      <ul>
+					<li class="fragment fade-in">Professionals are employed to get work done, not satisfy your quirky preferences.</li>
+				      </ul>
+				      <li class="fragment fade-in">Flat files are also *much* easier to fix in a recovery/"Boot a live CD, mount root" situation.</li>
+				    </ul>
+				</section>
+
+				<section>
+				  So, score one for "mechanically simple" rather than the elaborate solution.
+
+				  <p class="fragment fade-in">Next up:</p>
+				</section>
+
+				<section>
+				  <pre>
+				    <code data-trim data-noescape data-line-numbers class="language-go">
+				      import (
+				        "fmt"
+				        "os"
+				      )
+
+				      func main() {
+				      
+				        f, err := os.Open("filename.ext")
+				        if err != nil {
+				           log.Fatal(err)
+				        }
+				        // do something with fh
+				      }
+				    </code>
+
+				  </pre>
+
+				  <p class="fragment fade-in">Versus...</p>
+				</section>
+
+				<section>
+				  <pre>
+				    <code data-trim data-noescape data-line-numbers class="language-rust">
+use anyhow::*;
+use std::io::File;
+
+fn main -> Result<()> {
+  let mut fh = File::open("foo.txt")?;
+  // do something with fh
+
+  Ok(()
+}
+				    </code>
+				  </pre>
+				</section>
+
+				<section>
+				  Okay, so, differences:
+
+				  <ul>
+				    <li class="fragment fade-in">Go is very manual</li>
+				    <li class="fragment fade-in">...which means it's very easy to lose sight of greater context and either forget to check for failure, stuff a check in to appease a linter, or explicitly smother </li>
+				    <ul>
+				      <li class="fragment fade-in">forget to check...</li>
+				      <li class="fragment fade-in">deliberately throw away the result to appease (smother) the linter...</li>
+				      <li class="fragment fade-in">If it's bad, what should you do? Continue? Return early? Panic?</li>
+				    </ul>
+                                  </ul>
+				</section>
+
+				<section>
+				  This is really lipstick on the billion-dollar mistake, of course
+
+				  <p class="fragment fade-in">Which go decided to cargo-cult over because they don't think engineers can learn new things, apparently.</p>
+				  <p class="fragment fade-in">...even though there have been languages with sum types since ALGOL 68...</p>
+				</section>
+
+				<section>
+				  Rust still has a few of those problems.
+
+				  <ul>
+				    <li class="fragment fade-in">You still need to decide how to handle failure</li>
+				    <li class="fragment fade-in">But there's a very sensible default approach of "Continue on success, return a failure value on failure" which will work for at least 80% of the situations you're likely to come across.</li>
+				    <li class="fragment fade-in">And, if you use this approach, the compiler will, out of the box, tell you when you've ignored a failure</li>
+				    <ul>
+				      <li class="fragment fade-in">No extra linter needed</li>
+				  </ul>
+				</section>
+
+				<section>
+				  I'd argue that this represents
+				  <ul>
+				    <li class="fragment fade-in">More typesafety - the possibility of failure is declared right in the type signature</li>
+				    <li class="fragment fade-in">With an affordance that makes "do the obvious thing" trivial in the common case.</li>
+				    <li class="fragment fade-in">...and built-in compiler support for when you forget to do the sane thing</li>
+				  </ul>
+				</section>
+
+				<section>
+				  So, point to "machinery makes life easier." Cool!
+				</section>
+
+				<section>
+				  Next up: Threads
+
+				  <p>Advantages:
+				    <ul>
+				      <li class="fragment fade-in">Addresses the end of the <a href="http://www.gotw.ca/publications/concurrency-ddj.htm">"free lunch"</a></li>
+				      <li class="fragment fade-in">Potential for very fast code</li>
+				      <li class="fragment fade-in">Also lets different threads handle different tasks ("Separation of concerns")</li>
+				    </ul>
+				  </p>
+				</section>
+
+				<section>
+				  <p>Disadvantages:
+				    <ul>
+				      <li class="fragment fade-in">Potential (likelihood) for a combinatorial state explosion</li>
+				      <li class="fragment fade-in">Race conditions!</li>
+				      <li class="fragment fade-in">In some cases, spawning and managing threads can slow down processing.</li>
+				    </ul>
+				  </p>
+				</section>
+
+				<section>
+				  Don't take my word for it:
+
+				  <blockquote class="r-fit-text">
+				    By definition, though daughter threads of a process typically have separate local-variable stacks, they share the same global memory. The task of managing contentions and critical regions in this shared address space is quite difficult and a fertile source of global complexity and bugs. It can be done, but as the complexity of one's locking regime rises, the chance of races and deadlocks due to unanticipated interactions rises correspondingly.
+				    <p> 
+				      Threads are a fertile source of bugs because they can too easily know too much about each others' internal states. There is no automatic encapsulation, as there would be between processes with separate address spaces that must do explicit IPC to communicate. Thus, threaded programs suffer from not just ordinary contention problems, but from entire new categories of timing-dependent bugs that are excruciatingly difficult to even reproduce, let alone fix.
+				    </p>
+				  </blockquote>
+
+<p> -- Eric S. Raymond, <a href="http://www.catb.org/esr/writings/taoup/html/ch07s03.html#id2923889">Art of Unix Programming</a></p>
+				    
+				</section>
+
+				<section>
+				  So, this is a necessairy primitive, but it needs extra stuff before it's usable by anybody but hero-grade experts.
+
+				  <p>Things like:
+				    <ul>
+				      <li class="fragment fade-in">Variables being immutable-by-default</li>
+				      <li class="fragment fade-in">Move semantics</li>
+				      <li class="fragment fade-in">...or just .clone() values all over the place</li>
+				    </ul>
+				  </p>
+				</section>
+
+				<section>
+				  <img class="r-stretch" src="resources/png0.png" />
+				</section>
+
+				<section>
+				  Let's look at immutable-by-default semantics.
+
+				  <p>Downsides:
+				    <ul>
+				      <li class="fragment fade-in">Worse for both time <b>and</b> space complexity to copy entire data structures instead of mutate-in-place.</li>
+				      <li class="fragment fade-in">Side-effects are, broadly, why we write and run programs, so they have to happen at some point.</li>
+				      <li class="fragment fade-in">So, you're adding a lot of ceremony to something that must happen.</li>
+				      <ul>
+  					<li class="fragment fade-in">Which, unless you have a <span style="color:red;">very</span> good reason, is a bad idea.</li>
+				      </ul>
+				  </p>
+				</section>
+
+				<section>
+				  Upsides:
+				  <ul>
+				    <li class="fragment fade-in">Mutation is where bugs happen!</li>
+				    <li class="fragment fade-in">(race conditions especially, but that's next section)</li>
+				    <li class="fragment fade-in">Yes, there's ceremony, but it also tends to draw a big red circle around the places bugs like to hide</li>
+				    <li class="fragment fade-in">There's also very good support (at least in Rust) for both</li>
+				    <ul>
+				      <li class="fragment fade-in">this mutable var/borrow doesn't need to be mutable</li>
+				      <li class="fragment fade-in">this var/borrow is immutable, so don't mutate it</li>
+				    </ul>
+				  </ul>
+				</section>
+
+				<section>
+				  Which also leads us nicely to...
+
+				  <p class="fragment current-visible">The borrow checker</p>
+				  <p class="fragment fade-right">Move Semantics</p>
+				</section>
+
+				<section>
+				  The Borrow Checker
+
+				  <p>Disadvantages:
+				    <ul>
+				      <li class="fragment fade-right">It's an enormous amount of ceremony, especially when you're first starting out.</li>
+				      <li class="fragment fade-right">Rapid Prototyping gets difficult if you have to touch a lot of different data structures</li>
+				      <li class="fragment fade-right">On that note, conceptually small changes can sometimes result in large diffs.</li>
+				      <li class="fragment fade-right">Similarly, things that are trivial in most languages require much more thought here</li>
+				    </ul>
+				  </p>
+				</section>
+
+				<section>
+				  <p>Advantages:
+				    <ul>
+				      <li class="fragment fade-right">It's easy in other langs because they're lying to you.</li>
+				      <li class="fragment fade-right">Rapid prototyping is hard, but designs that pass the borrow checker tend to be much more robust</li>
+				      <li class="fragment fade-right">Similarly, you _can_ do the spooky things that other lang's default to...</li>
+				      <ul>
+					<li class="fragment fade-up">But rust will make you put Clown makeup on, first.</li>
+				      </ul>
+				    </ul>
+				  </p>
+				</section>
+
+				<section>
+				  Okay, fine, but I still hate the borrow checker, it's too complicated and opaque.
+
+				  <p class="fragment fade-in">Let's talk about Monad Transformers!'</p>
+				</section>
+
+				<section>
+				  Okay, I'm poking fun, but let's look at ExceptT. Does it pay its weight?
+				</section>
+
+				<section>
+				  The hype:
+
+				  <p><ul>
+				      <li class="fragment fade-left">If we track failure with Maybe, shouldn't we track "I'll shotgun the runtime" at the type system, too?</li>
+				      <li class="fragment fade-left">And since Monad's don't compose on their own, we need monads-in-disguise to help with that, right?</li>
+				  </ul></p>
+				</section>
+
+				<section>
+				  Okay, let's look at some code.<br /><br />
+
+				  <pre><code data-trim data-noescape data-line-numbers class="language-haskell">
+myBugFreeFunction :: IO ()
+myBugFreeFunction = do
+    let myElem = head []
+    putStrLn myElem
+    putStrLn "End of bug-free function!"
+				  </code></pre>
+				</section>
+
+				<section>
+
+				  <pre><code data-trim data-noescape data-line-numbers class="language-haskell">
+myBugFreeExceptTFunction :: ExceptT ErrorCall IO ()
+myBugFreeExceptTFunction = do
+    let myElem = head []
+    lift $ do
+        putStrLn myElem
+        putStrLn "End of bug-free ExceptT function!"
+				  </code></pre>
+				</section>
+
+				<section>
+				  Okay, neat. We'll define a helper function to make the catch calls a bit easier.
+
+				<pre><code data-trim data-noescape data-line-numbers class="language-haskell">
+handler :: String -> ErrorCall -> IO ()
+handler msg e = hPutStr stderr $ msg <> " " <> show e
+
+				</code></pre></section>
+
+				<section>
+				  <pre><code data-trim data-noescape data-line-numbers class="language-haskell">
+main :: IO ()
+main = do
+    putStrLn "\n\n\nRunning without ExceptT:"
+    catch
+      (myBugFreeFunction)
+      (handler "My bug free code exploded!")
+    hPutStr stderr "\n\n"
+    putStrLn "Running with ExceptT:"
+    catch
+      (void $ runExceptT myBugFreeExceptTFunction)
+      (handler "My bug free ExceptT code exploded!")
+    hPutStr stderr "\n\n"
+    putStrLn "End of main!"
+				 </code></pre> 
+				</section>
+
+				<section>
+				  Okay, how does it go?
+				  <pre><code data-trim data-noescape data-line-numbers class="language-haskell">
+Running without ExceptT:
+My bug free code exploded! Prelude.head: empty list
+CallStack (from HasCallStack):
+  error, called at libraries/base/GHC/List.hs:1644:3 in base:GHC.List
+  errorEmptyList, called at libraries/base/GHC/List.hs:87:11 in base:GHC.List
+  badHead, called at libraries/base/GHC/List.hs:83:28 in base:GHC.List
+  head, called at app/Main.hs:37:18 in main:Main
+				  </code></pre>
+				</section>
+	
+				<section>
+				  <pre><code data-trim data-noescape data-line-numbers class="language-haskell">
+Running with ExceptT:
+My bug free ExceptT code exploded! Prelude.head: empty list
+CallStack (from HasCallStack):
+  error, called at libraries/base/GHC/List.hs:1644:3 in base:GHC.List
+  errorEmptyList, called at libraries/base/GHC/List.hs:87:11 in base:GHC.List
+  badHead, called at libraries/base/GHC/List.hs:83:28 in base:GHC.List
+  head, called at app/Main.hs:43:18 in main:Main
+
+End of main!
+				  </code></pre>
+				</section>
+
+				<section>
+				  Okay, let's look at a different booming-function:
+				  <pre><code data-trim data-noescape data-line-numbers class="language-haskell">
+myBugFreeFileRead :: IO ()
+myBugFreeFileRead = do
+    _ <- openFile "sir-not-appearing-in-this-talk.txt" ReadMode
+    putStrLn "End of bug-free file read function!"
+				  </code></pre>
+				</section>
+
+
+				<section>
+				  And the ExceptT variant:
+				  <pre><code data-trim data-noescape data-line-numbers class="language-haskell">
+myBugFreeExceptTFileRead :: ExceptT IOException IO ()
+myBugFreeExceptTFileRead = do
+    lift $ do
+        _ <- openFile "sir-not-appearing-in-this-talk.txt" ReadMode
+        putStrLn "End of bug-free ExceptT file read function!"
+				  </code></pre>
+				</section>
+
+				<section>
+				  Helper function:
+
+				  <pre><code data-trim data-noescape data-line-numbers class="language-haskell">
+handlerFile :: String -> IOException -> IO ()
+handlerFile msg e = hPutStr stderr $ msg <> " " <> show e
+				  </code></pre>
+				</section>
+
+				<section>
+				  Our new main:
+				  
+				  <p><pre><code data-trim data-noescape data-line-numbers class="language-haskell">
+main :: IO ()
+main = do
+    putStrLn "\nRunning without ExceptT:"
+    catch
+      (myBugFreeFileRead)
+      (handlerFile "\nMy bug free file read function failed!")
+    putStrLn "\nRunning with ExceptT:"
+    catch
+      (void $ runExceptT myBugFreeExceptTFileRead)
+      (handlerFile "\nMy bug free ExceptT file read function failed!")
+    putStrLn "End of main!"
+				  </code></pre></p>
+				</section>
+
+				<section>
+				  And the result:
+
+				  <p><pre><code data-trim data-noescape data-line-numbers class="language-haskell">
+Running without ExceptT:
+
+My bug free file read function failed!
+  sir-not-appearing-in-this-talk.txt:
+  openFile: does not exist (No such file or directory)
+
+Running with ExceptT:
+
+My bug free ExceptT file read function failed!
+  sir-not-appearing-in-this-talk.txt:
+  openFile: does not exist (No such file or directory)
+
+End of main!
+				  </code></pre></p>
+				</section>
+
+				<section>
+				  So, is this a win?
+
+				  <ul>
+				    <li class="fragment fade-in">Well, ExceptT adds another return path to functions</li>
+				    <li class="fragment fade-in">...but doesn't affect the pre-existing ones.</li>
+				    <li class="fragment fade-in">What's worse, a lot of the Prelude/standard library chucks exceptions around like rice at a wedding</li>
+				    <ul>
+				      <li class="fragment fade-in">So this is a real problem you'll have to confront</li>
+				    </ul>
+				  </ul>
+				</section>
+
+				<section>
+				  Well, yes, BUT!
+
+				  <pre class="fragment fade-in">
+				    <code data-trim data-noescape data-line-numbers="|5" class="language-rust">
+use anyhow::*;
+use std::io::File;
+
+fn main -> Result<()> {
+  let mut fh = File::open("foo.txt")?;
+  // do something with fh
+
+  Ok(()
+}
+				    </code>
+				  </pre>
+				</section>
+
+
+				<section>
+				  <pre >
+				    <code data-trim data-noescape data-line-numbers data-ln-start-from="5" class="language-rust">
+  let mut fh = File::open("foo.txt")?;
+				    </code>
+				  </pre>
+
+				  <p>This function -- and most others in standard rust -- returns either a Result or an Option -- Haskellers would call these an Either or a Maybe, respectively.</p>
+				</section>
+
+				<section>
+				  Now, it's not all roses. Rust is unable to perform miracles, so:
+
+				  <pre>
+				    <code data-trim data-escape data-line-numbers="|1|2"  class="language-rust"><script type="text/template">
+    let mut fh: Result<File, Error> = File::open("foo.txt");
+    let actual_file: File = fh.unwrap();
+			       </script>
+				</code>
+				  </pre>
+
+				  <p class="fragment fade-in">If <code>fh</code> is <code>None</code>, calling <code>.unwrap()</code> on it will cause a panic, because Rust isn't able to create the correct value from thin air.</p>
+				  
+				</section>
+
+				<section>
+				  Important to note that this is enforced by... well, basically, vibes.
+
+				  <p class="fragment fade-in">Nothing is stopping people from writing Rust code -- or releasing Rust libraries -- that throw exceptions all over the place.</p>
+				</section>
+
+				<section>
+				  So, this one is a mixed bag. Good idea, but very dependent on implementation, and the surrounding culture.
+
+				  <p class="fragment fade-in">So, one of the things you need to evaluate when looking at rust libraries is "how do they handle failure?"</p>
+				  <p class="fragment fade-in">If they throw exceptions casually, that's a good sign to look for other options.</p>
+				</section>
+
+				<section>
+				  Okay, let's look at the thing I advertised in this talk:
+
+				  <p class="fragment fade-in">Let's look at some code in Yesod and Servant</p>
+				</section>
+
+				<section>
+				  An overview of each, starting with Yesod:
+
+				  <p>Yesod is...<ol>
+				      <li class="fragment fade-in">Fairly simple</li>
+				      <li class="fragment fade-in">Relies on Template Haskell</li>
+				      <li class="fragment fade-in">Built off of Wai (like Servant)</li>
+				      <li class="fragment fade-in">Provides access to the raw WAI request</li>
+				  </ol></p>
+				</section>
+
+				<section>
+				  Let's build up an example. We need some ceremony to get things started.
+
+				  <pre>
+				    <code data-trim data-escape data-line-numbers class="language-haskell"><script type="text/template">
+data HelloWorld = HelloWorld
+
+mkYesod "HelloWorld" [parseRoutes|
+/ HomeR GET
+|]
+
+instance Yesod HelloWorld
+
+				      </script>
+				    </code>
+				  </pre>
+				  
+				</section>
+
+				<section>
+				  <pre>
+				    <code data-trim data-escape data-line-numbers class="language-haskell">
+				      <script type="text/template">
+getHomeR :: Handler Html
+getHomeR = defaultLayout [whamlet|Hello, World!|]
+
+main :: IO ()
+main = warp 3000 HelloWorld
+				      </script>
+				    </code>
+				  </pre>
+				  
+				</section>
+
+				<section>
+				  That was easy. What if we want to extend this? Say, add an endpoint at /fancy that takes in a JSON post body and does something with it?
+				  <pre class="fragment fade-in">
+				    <code data-trim data-escape data-line-numbers="|5" class="language-haskell">
+				      <script type="text/template">
+data HelloWorld = HelloWorld
+
+mkYesod "HelloWorld" [parseRoutes|
+/      HomeR         GET
+/fancy DoFancyThingR POST
+|]
+
+instance Yesod HelloWorld
+				      </script>
+				    </code>
+				  </pre>
+				  
+				</section>
+
+				<section>
+				  We'll have to define a type for aeson to read in:
+				  <pre class="fragment fade-in">
+				    <code data-trim data-escape data-line-numbers class="language-haskell">
+				      <script type="text/template">
+data TalkSnark = TalkSnark { lambdaconf :: String }
+  deriving (Eq, Ord, Show, ToJSON, FromJSON, Generic)
+				      </script>
+				    </code>
+				  </pre>
+				</section>
+
+				<section>
+				  And we'll have to write the handler function:
+				  <pre class="fragment fade-in">
+				    <code data-trim data-escape data-line-numbers class="language-haskell">
+				      <script type="text/template">
+postDoFancyThingR :: Handler Html
+postDoFancyThingR = do
+  req :: W.Request <- reqWaiRequest <$> getRequest 
+  reqBody <- liftIO $ W.requestBody req
+  let
+      reqTalkSnark :: Maybe TalkSnark
+      reqTalkSnark = decodeStrict reqBody
+  case reqTalkSnark of
+    Nothing -> defaultLayout [whamlet|I couldn't parse that. :(|]
+    Just ts -> defaultLayout [whamlet|You think LambdaConf #{ts.lambdaconf}|]
+				      </script>
+				    </code>
+				  </pre>
+				</section>
+
+				<section>
+				  So if we run something like...
+				  <pre class="fragment fade-in">
+				    <code data-trim data-escape data-line-numbers class="language-shell">
+				      <script type="text/template">
+					curl -X POST http://localhost:3000/fancy \
+					  -H "Content-Type: application/json"\
+					  -d @example_post_body.json
+				      </script>
+				    </code>
+				  </pre>
+
+				  <p class="fragment fade-in">And that example file looks like:
+				  <pre class="fragment fade-in">
+				    <code data-trim data-escape data-line-numbers class="language-json">
+				      <script type="text/template">
+
+{
+  "lambdaconf": "is awesome!"
+}
+				      </script>
+				    </code>
+				  </pre>
+				</section>
+
+				<section>
+				  Then our result will look like this:
+				  <pre>
+				    <code data-trim data-escape data-line-numbers class="language-haskell">
+				      <script type="text/template">
+<!DOCTYPE html>
+ <html><head><title></title></head><body>
+     You think LambdaConf is awesome!
+ </body></html>
+				      </script>
+				    </code>
+				  </pre>
+				</section>
+
+
+				<section>
+				  Neat. Let's de the same thing in Servant.
+				  
+				  <pre>
+				    <code data-trim data-escape data-line-numbers class="language-haskell">
+				      <script type="text/template">
+type ItemApi =
+  Get '[PlainText] String
+
+itemApi :: Proxy ItemApi
+itemApi = Proxy
+
+server :: Server ItemApi
+server =
+  helloWorld
+				      </script>
+				    </code>
+				  </pre>
+				</section>
+
+				<section>
+				  Our main function is a bit more baroque:
+				  <pre>
+				    <code data-trim data-escape data-line-numbers class="language-haskell">
+				      <script type="text/template">
+mkApp :: IO Application
+mkApp = return $ serve itemApi server
+
+main :: IO ()
+main = do
+  let port = 3001
+      settings =
+        setPort port $
+        setBeforeMainLoop (hPutStrLn  stderr ("listening on port " <> show port)) $
+        defaultSettings
+  runSettings settings =<< mkApp
+				      </script>
+				    </code>
+				  </pre>
+				</section>
+
+				<section>
+				  Okay. Let's extend it the same way we did previously
+				  
+				  <pre class="fragment fade-in">
+				    <code data-trim data-escape data-line-numbers="|3,4,12" class="language-haskell">
+				      <script type="text/template">
+type ItemApi =
+  Get '[PlainText] String
+  :<|> "fancy" :> ReqBody '[JSON] TalkSnark
+       :> Post '[PlainText] String
+
+itemApi :: Proxy ItemApi
+itemApi = Proxy
+
+server :: Server ItemApi
+server =
+  helloWorld
+  :<|> parseLambdaConf
+				      </script>
+				    </code>
+				  </pre>
+				</section>
+
+				<section>
+				  Again, we define the record type and handler function...
+				  
+				  <pre class="fragment fade-in">
+				    <code data-trim data-escape data-line-numbers class="language-haskell">
+				      <script type="text/template">
+data TalkSnark = TalkSnark { lambdaconf :: String }
+  deriving (Eq, Ord, Show, ToJSON, FromJSON, Generic)
+
+parseLambdaConf :: TalkSnark -> Handler String
+parseLambdaConf ts = return $ "You think LambdaConf "
+                              <> lambdaconf ts
+				      </script>
+				    </code>
+				  </pre>
+
+				  <p class="fragment fade-in">And it should be no surprise that this returns the same result (minus HTML tags) as our Yesod example</p>
+				</section>
+
+				
+				<section>
+				  So, which one comes out ahead? Probably servant, right?
+
+				  <p><ul>
+				      <li class="fragment fade-in">Yesod is much less restrictive - it just gives you the raw wai request</li>
+				      <li class="fragment fade-in">Servant's setup gives you a very clear specification of what each function consumes and returns</li>
+				      <li class="fragment fade-in">Yesod also does a bunch of weird magic with Template Haskell, which makes it hard to read Yesod code and reason about what's going on, right?</li>
+				  </ul></p>
+				</section>
+
+				<section>
+				  Well, not quite.
+
+				  <p><ul>
+				      <li class="fragment fade-in">Yesod does some TH weirdness, but Servant uses a lot of Type Family weirdness, too.</li>
+				      <li class="fragment fade-in">This also means "here's the type to put into the API" and "here's what that actually does" are usually _very_ separate, and needs a lot of know-how to follow</li>
+				  </ul></p>
+				</section>
+
+				<section>
+				  <ul>
+				      <li class="fragment fade-in">Servant also conspicuously omits combinators to parts of the Wai Request</li>
+				      <ul class="fragment fade-in">
+					<li>The full QueryParameter list</li>
+					<li>The full Headers list</li>
+					<li>The Full Query String</li>
+					<li>The Raw Query String</li>
+					<li>Raw Path Info</li>
+				      </ul>
+				  </ul>
+				</section>
+
+				<section>
+				  So let's walk through some hypotheticals. Say we need to pull in an extra query parameter in a handler.
+				  <p class="fragment fade-in">In Yesod, you'd have to:</p>
+				    <ul class="fragment fade-in">
+				    <li>Grab the raw request in the handler, if it wasn't already grabbed</li>
+				    <li>Grab the binding from the request, probably putting it into a let-binding</li>
+				    <li>Do something smart with it.</li>
+				  </ul>
+
+				    <p class="fragment fade-in">That's one place to touch.</p>
+				</section>
+
+				<section>
+				  In Servant, this becomes:
+				  
+				    <ul class="fragment fade-in">
+				    <li>Update the server API type to reflect the new function signature</li>
+				    <li>Update the handler function type signature to accept the new argument</li>
+				    <li>Update the handler function with both the new argument, and the new business logic</li>
+				  </ul>
+
+				    <p class="fragment fade-in">...and there's another problem</p>
+				</section>
+
+
+				<section>
+				  All three of these types have to be in sync:
+				  
+				  <pre class="fragment fade-in">
+				    <code data-trim data-escape data-line-numbers="|1,2|4-6|8-9" class="language-haskell">
+				      <script type="text/template">
+type ItemApi =
+  Get '[PlainText] String
+
+server :: Server ItemApi
+server =
+  helloWorld
+
+helloWorld :: Handler String
+helloWorld = return "Hello, World!"
+				      </script>
+				    </code>
+				  </pre>
+
+				  <p class="fragment fade-in">"Yes, that's how type systems work, what's the problem?"</p>
+				</section>
+
+				<section>
+				  Well, type systems are usually pretty good about saying "You promised this value would be X, and it's actually Y"
+				  <p class="fragment fade-in">This is not one of servant's strengths:
+				  <pre class="fragment fade-in">
+				    <code data-trim data-escape data-line-numbers="|1,2|4-6|8-9" class="language-haskell">
+				      <script type="text/template">
+      Expected: Server ItemApi
+        Actual: Handler String :<|> (TalkSnark -> Handler String)
+				      </script>
+				    </code>
+				  </pre>
+				  </p>
+
+				  <p class="fragment fade-in">This gets Profoundly Gnarly* as soon as you get out of toy example sized servers.</p>
+				</section>
+
+				<section>
+				  There is something you can do to mitigate this, however:
+
+				  <pre class="fragment fade-in">
+				    <code data-trim data-escape data-line-numbers class="language-haskell">
+				      <script type="text/template">
+					-- In each module, define your handler functions...
+					handleFoo :: Handler String
+					handleFoo = ...
+
+					handleBar :: Handler String
+					handleBar = ...
+
+					handleBaz :: Handler String
+					handleBaz = ...
+				      </script>
+				    </code>
+				  </pre>
+				</section>
+				<section>
+				  <pre>
+				    <code data-trim data-escape data-line-numbers class="language-haskell">
+				      <script type="text/template">
+					-- Then define an API type and server for those handlers
+					type HandleFooBarBaz = "foo" :> Get '[PlainText] String
+					                  :<|> "bar" :> Get '[PlainText] String
+					                  :<|> "baz" :> Get '[PlainText] String
+
+					serveFooBarBaz :: Server HandleFooBar
+					serveFooBarBaz = handleFoo :<|> handleBar :<|> handleBaz
+				      </script>
+				    </code>
+				  </pre>
+				</section>
+
+				<section>
+				  Then, when you define your final server, you can just do:
+				  <pre class="fragment fade-in">
+				    <code data-trim data-escape data-line-numbers class="language-haskell">
+				      <script type="text/template">
+					type MyServer = ... :<|> HandleFooBarBaz ...
+
+					server :: Server MyServer
+					server = ... :<|> serveFooBarBaz ...
+				      </script>
+				    </code>
+				  </pre>
+				</section>
+
+				<section>
+				  If there's a problem with the local definitions, they'll error out first. If there's a mismatch with the master definition, it'll be a bit easier to reason about.
+
+				  <p class="fragment fade-in">Bonus points if you can set up your type and server definitions to be alphabetically sorted, but that isn't always possible because of route precident rules.</p>
+				</section>
+
+				<section>
+				  Adding a new endpoint is the same step, but we now need to update both the server API type, the server function, and create the new handling function.
+
+				  <p class="fragment fade-in">And hope we don't typo something along the way...</p>
+
+				  <p class="fragment fade-in">But the biggest problem of all, really, is the fact that out-of-the-box, large chunks of functionality are just... missing</p>
+				</section>
+
+				<section>
+				  If you need to get a lot of values from headers, for example, the API type looks a bit like this:
+
+				  <pre>
+				    <code data-trim data-escape data-line-numbers class="language-haskell">
+				      <script type="text/template">
+					type MyServer = "endpoint" :> Header "header0"  Text
+					                           :> Header "header1"  Text
+					                           :> Header "header2"  Text
+					                           :> Header "header3"  Text
+					                           :> Header "header4"  Text
+					                           :> Header "header5"  Text
+					                           :> Get '[PlainText] String
+				      </script>
+				    </code>
+				  </pre>
+				</section>
+				  
+				<section>
+				  <pre>
+				    <code data-trim data-escape data-line-numbers class="language-haskell">
+				      <script type="text/template">
+					endpointHandler :: Text
+					                -> Text
+					                -> Text
+					                -> Text
+					                -> Text
+					                -> Text
+					                -> Handler String
+					endpointHandler h0 h1 h2 h3 h4 h5 = ...
+				      </script>
+				    </code>
+				  </pre>
+
+				  <p class="fragment fade-in">As it turns out, this is a bit of an anti-pattern, and there's even a <a href="https://www.snoyman.com/blog/2016/11/designing-apis-for-extensibility/">blog post</a> about this sort of pattern, and how it can be fixed.
+				</section>
+
+				<section>
+				  But, of course, we have one of those already - the Wai request type.
+				</section>
+
+				<section>
+				  So, what can we learn from all this?
+
+				  <p class="fragment fade-in">Let me tell you a story...</p>
+				</section>
+
+				<section>
+				  "Morally grey" fiction has gotten
+				  much more popular of late. It's easy
+				  for that to turn vapidly nihilistic,
+				  but there is a deeper point, here,
+				  that is worth pondering:
+
+				  <p class="fragment fade-in">Just because your side does a thing, does not make it the right thing.</p>
+				</section>
+
+
+				<section>
+				  Driving the point home: Much of what separates a junior from a senior engineer boils down to two things:
+				  <p />
+				  <ol>
+				    <li class="fragment fade-in">Social skills -- mentoring juniors, coordinating with other teams, working with customers</li>
+				    <li class="fragment fade-in">Evaluating the trade-offs behind different technology choices, in the context of your team and their needs.</li>
+				  </ol>
+				</section>
+
+				<section>Thank you.</section>
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+			        // Disable auto-centering.
+			        center: false,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
